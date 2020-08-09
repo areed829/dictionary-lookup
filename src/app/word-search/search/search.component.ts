@@ -22,6 +22,7 @@ const groupWords = map<string[], any>((words) =>
   styleUrls: ['./search.component.scss'],
 })
 export class SearchComponent implements OnInit {
+  private readonly minimumWordLength = 3;
   searchCharacters$ = new Subject<string>();
   words$ = this.searchCharacters$.pipe(
     distinctUntilChanged(),
@@ -30,14 +31,12 @@ export class SearchComponent implements OnInit {
         .getDictionary()
         .pipe(map((words) => this.filterWords(searchCharacters, words)))
     ),
-    groupWords,
-    tap(console.log)
+    groupWords
   );
 
   constructor(private searchService: SearchService) {}
 
   ngOnInit() {
-    console.log('orecvt');
     this.words$.subscribe();
   }
 
@@ -48,7 +47,9 @@ export class SearchComponent implements OnInit {
   filterWords(possibleCharacters: string, words: string[]) {
     return words
       .filter(
-        (word) => word.length >= 3 && word.length <= possibleCharacters.length
+        (word) =>
+          word.length >= this.minimumWordLength &&
+          word.length <= possibleCharacters.length
       )
       .filter((word) => {
         let valid = true;

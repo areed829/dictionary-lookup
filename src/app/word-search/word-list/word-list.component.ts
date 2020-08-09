@@ -37,7 +37,6 @@ export class WordListComponent implements OnInit {
       keys.forEach((key) => (row[key] = words[key][i]));
       dataSet = [...dataSet, row];
     }
-    console.log('dataSet', dataSet);
     return dataSet;
   }
 }
